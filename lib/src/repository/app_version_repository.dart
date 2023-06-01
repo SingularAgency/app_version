@@ -64,7 +64,7 @@ class AndroidRepository extends AppVersionRepository{
     try {
       final response = await http.get(uri);
       if (response.statusCode != 200) {
-        debugPrint('Cant find an app in the Google Play Store with the id: $appName');
+        debugPrint('Cant find an app in the Google Play Store with the id: $appName',);
         return AppVersionResult(canUpdate: false, url: null,newVersion: null);
       } else {
         newVersion = RegExp(r',\[\[\["([0-9,\.]*)"]],').firstMatch(response.body)!.group(1);
