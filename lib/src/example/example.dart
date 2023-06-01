@@ -27,6 +27,7 @@ class _AppVersionExampleState extends State<AppVersionExample> {
             return AlertDialog(
               title: const Text('App Version'),
               content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text('The is a new version for this app'),
                   Text('New Version: ${result.newVersion}'),
