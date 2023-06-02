@@ -30,14 +30,18 @@ flutter packages get
 
 Para usarlo simplemente cree una instancia de AppVersion, y llame a .checkUpdate(),
 
-La clase tiene un parametro opcional en su constructor llamado forceNewVersion, este le servira solo para testear y crear su custom modal a la hora que encuentre una nueva version.
+La clase tiene un parametro opcional en su constructor llamado forceCurrentVersion, este le servira solo para testear y crear su custom modal a la hora que encuentre una nueva version.
 
 La variable result es una instancia (AppVersionResult) que trae un bool diciendo si se puede actualizar (canUpdate),
 Tambien trae la nueva version del app encontrada (newVersion), y la url para redirigir a la tienda (url).
 ```dart
 Future<void> _checkVersion() async {
+  
+  //final appVersion = AppVersion(forceCurrentVersion: '1.0.0'); Opcional para test
+  
   final appVersion = AppVersion();
   final result = await appVersion.checkVersion();
+
   if(result.canUpdate){
     if(context.mounted){
       await showDialog(
