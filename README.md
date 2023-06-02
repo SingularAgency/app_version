@@ -15,6 +15,7 @@ Add `app_version` to your `pubspec.yaml`:
 ```yaml
 dependencies:
   app_version:
+    git: 'https://github.com/amilkarSingular/app_version.git'
 ```
 
 Install it:
@@ -25,50 +26,39 @@ flutter packages get
 
 ---
 
-## Continuous Integration 🤖
+## Usage 🤖
 
-App Version comes with a built-in [GitHub Actions workflow][github_actions_link] powered by [Very Good Workflows][very_good_workflows_link] but you can also add your preferred CI/CD solution.
+Para usarlo simplemente cree una instancia de AppVersion, y llame a .checkUpdate(),
 
-Out of the box, on each pull request and push, the CI `formats`, `lints`, and `tests` the code. This ensures the code remains consistent and behaves correctly as you add functionality or make changes. The project uses [Very Good Analysis][very_good_analysis_link] for a strict set of analysis options used by our team. Code coverage is enforced using the [Very Good Workflows][very_good_coverage_link].
+La clase tiene un parametro opcional en su constructor llamado forceNewVersion, este le servira solo para testear y crear su custom modal a la hora que encuentre una nueva version.
+
+La variable result es una instancia (AppVersionResult) que trae un bool diciendo si se puede actualizar (canUpdate),
+Tambien trae la nueva version del app encontrada (newVersion), y la url para redirigir a la tienda (url).
+```dart
+Future<void> _checkVersion() async {
+  final appVersion = AppVersion();
+  final result = await appVersion.checkVersion();
+  if(result.canUpdate){
+    if(context.mounted){
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('App Version'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text('There is a new version for this app'),
+                Text('New Version: ${result.newVersion}'),
+                Text('Url to redirect: ${result.url}')
+              ],
+            ),
+          );
+        },);
+    }
+  }
+}
+
+```
 
 ---
-
-## Running Tests 🧪
-
-For first time users, install the [very_good_cli][very_good_cli_link]:
-
-```sh
-dart pub global activate very_good_cli
-```
-
-To run all unit tests:
-
-```sh
-very_good test --coverage
-```
-
-To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov).
-
-```sh
-# Generate Coverage Report
-genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-open coverage/index.html
-```
-
-[flutter_install_link]: https://docs.flutter.dev/get-started/install
-[github_actions_link]: https://docs.github.com/en/actions/learn-github-actions
-[license_badge]: https://img.shields.io/badge/license-MIT-blue.svg
-[license_link]: https://opensource.org/licenses/MIT
-[logo_black]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_black.png#gh-light-mode-only
-[logo_white]: https://raw.githubusercontent.com/VGVentures/very_good_brand/main/styles/README/vgv_logo_white.png#gh-dark-mode-only
-[mason_link]: https://github.com/felangel/mason
-[very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
-[very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
-[very_good_cli_link]: https://pub.dev/packages/very_good_cli
-[very_good_coverage_link]: https://github.com/marketplace/actions/very-good-coverage
-[very_good_ventures_link]: https://verygood.ventures
-[very_good_ventures_link_light]: https://verygood.ventures#gh-light-mode-only
-[very_good_ventures_link_dark]: https://verygood.ventures#gh-dark-mode-only
-[very_good_workflows_link]: https://github.com/VeryGoodOpenSource/very_good_workflows
